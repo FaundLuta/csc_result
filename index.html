@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CSC Year 1 Leaderboard · FUTO 2023/2024</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#f5c842;--silver:#b0bec5;--bronze:#cd7f32;
+  --bg:#07080f;--surface:#0e1018;--border:#1e2133;
+  --text:#e4e8f0;--muted:#5a607a;--accent:#3a8eff;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ══ LOGIN ══ */
+#loginPage{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+  background:linear-gradient(160deg,#0a0d1c,#0f1628 50%,#080d1a);
+  position:relative;overflow:hidden;
+}
+#loginPage::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);
+  width:500px;height:450px;background:radial-gradient(ellipse,#f5c84215,transparent 68%);pointer-events:none}
+.login-box{
+  background:#0e1018;border:1px solid #1e2133;border-radius:18px;
+  padding:40px 28px 36px;width:100%;max-width:340px;text-align:center;
+  box-shadow:0 32px 80px #00000070;position:relative;z-index:1;
+}
+.login-emblem{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#f5c842,#e8a800);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin:0 auto 18px;box-shadow:0 0 0 6px #f5c84215;
+}
+.login-badge{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);
+  font-family:'DM Mono',monospace;display:block;margin-bottom:10px}
+.login-box h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#fff;margin-bottom:4px}
+.login-box h2 span{color:var(--gold)}
+.login-desc{font-size:12px;color:var(--muted);margin-bottom:28px;line-height:1.5}
+.pw-label{font-size:11px;color:var(--muted);text-align:left;display:block;margin-bottom:6px;letter-spacing:.5px}
+.pw-wrap{position:relative;margin-bottom:10px}
+.pw-wrap input{
+  width:100%;background:#141621;border:1px solid var(--border);
+  border-radius:10px;color:var(--text);padding:13px 44px 13px 16px;
+  font-size:16px;font-family:'DM Mono',monospace;outline:none;
+  transition:border-color .2s,box-shadow .2s;letter-spacing:4px;text-align:center;
+}
+.pw-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #f5c84218}
+.pw-wrap input::placeholder{letter-spacing:0;color:var(--muted);font-size:13px;font-family:'DM Sans',sans-serif}
+.eye-btn{position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px;line-height:1;transition:color .15s}
+.eye-btn:hover{color:var(--text)}
+.login-error{font-size:12px;color:#ff6b6b;background:#ff6b6b12;border:1px solid #ff6b6b30;
+  border-radius:8px;padding:8px 12px;display:none;margin-bottom:14px}
+.login-btn{
+  width:100%;background:linear-gradient(135deg,#f5c842,#e8a800);
+  border:none;border-radius:10px;color:#07080f;padding:13px;
+  font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:opacity .2s,transform .1s;letter-spacing:.5px;margin-top:4px;
+}
+.login-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ══ MAIN ══ */
+#mainApp{display:none}
+
+/* HERO */
+.hero{
+  background:linear-gradient(160deg,#0c0f1e,#101525 50%,#0c1427);
+  border-bottom:1px solid var(--border);
+  padding:36px 16px 28px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+  width:600px;height:300px;background:radial-gradient(ellipse,#f5c84218,transparent 70%);pointer-events:none}
+.hero-badge{
+  display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);background:#f5c84210;border:1px solid #f5c84230;
+  border-radius:20px;padding:5px 14px;margin-bottom:12px;font-family:'DM Mono',monospace;
+}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(26px,7vw,44px);
+  font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.1;margin-bottom:8px}
+.hero h1 span{color:var(--gold)}
+.hero-sub{font-size:12px;color:var(--muted);margin-bottom:22px}
+
+/* MY RESULT BUTTON */
+.my-result-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#f5c842,#e8a800);
+  border:none;border-radius:12px;color:#07080f;
+  padding:13px 24px;font-size:14px;font-weight:700;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  transition:transform .15s,opacity .15s,box-shadow .15s;
+  box-shadow:0 4px 20px #f5c84235;margin-bottom:24px;
+}
+.my-result-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px #f5c84250;opacity:.95}
+.my-result-btn:active{transform:translateY(0)}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:380px;margin:0 auto}
+.stat-card{background:#ffffff08;border:1px solid var(--border);border-radius:10px;padding:11px 6px;text-align:center}
+.stat-card .val{font-size:20px;font-weight:700;line-height:1;margin-bottom:3px}
+.stat-card .lbl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* PODIUM */
+.podium{display:flex;gap:8px;padding:22px 16px 16px;justify-content:center;align-items:flex-end;max-width:400px;margin:0 auto}
+.podium-card{flex:1;border-radius:10px;padding:14px 8px;text-align:center;display:flex;flex-direction:column;
+  align-items:center;gap:4px;border:2px solid transparent;transition:transform .2s}
+.podium-card:hover{transform:translateY(-3px)}
+.podium-card.gold  {border-color:var(--gold);  background:linear-gradient(160deg,#f5c84218,#0e1018);height:158px}
+.podium-card.silver{border-color:var(--silver);background:linear-gradient(160deg,#b0bec518,#0e1018);height:126px}
+.podium-card.bronze{border-color:var(--bronze);background:linear-gradient(160deg,#cd7f3218,#0e1018);height:106px}
+.podium-medal{font-size:22px;line-height:1}
+.podium-rank{font-size:10px;font-weight:700;font-family:'DM Mono',monospace;opacity:.8}
+.podium-name{font-size:12px;font-weight:600;color:#fff;line-height:1.3}
+.podium-cgpa{font-size:17px;font-weight:700}
+
+/* CONTROLS */
+.controls{padding:16px 16px 8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;max-width:860px;margin:0 auto}
+.search-wrap{position:relative;flex:1;min-width:160px}
+.s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
+input[type="search"]{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);padding:9px 12px 9px 32px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+input[type="search"]:focus{border-color:var(--accent)}
+input[type="search"]::placeholder{color:var(--muted)}
+select{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);
+  padding:9px 10px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer}
+.count-lbl{font-size:11px;color:var(--muted);white-space:nowrap;font-family:'DM Mono',monospace}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;padding:0 16px;max-width:860px;margin:0 auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{border-bottom:1px solid var(--border)}
+thead th{padding:10px 12px;text-align:left;color:var(--muted);font-weight:600;font-size:9px;
+  letter-spacing:1.5px;text-transform:uppercase;font-family:'DM Mono',monospace;white-space:nowrap}
+tbody tr{border-bottom:1px solid #ffffff06;transition:background .15s}
+tbody tr:hover{background:#ffffff07}
+tbody td{padding:11px 12px;vertical-align:middle}
+.r-cell{color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+.n-cell{color:var(--text);font-weight:500}
+.n-cell.hi{font-weight:600;color:#fff}
+.reg-cell{color:var(--muted);font-family:'DM Mono',monospace;font-size:11px}
+.c-cell{font-weight:700;font-size:14px;font-family:'DM Mono',monospace}
+.badge{display:inline-block;border-radius:5px;padding:3px 8px;font-size:10px;font-weight:600;white-space:nowrap;border:1px solid;font-family:'DM Mono',monospace}
+
+/* PAGINATION */
+.pagination{display:flex;gap:8px;justify-content:center;align-items:center;padding:20px 16px}
+.pg-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:7px;
+  padding:7px 16px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.pg-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.pg-btn:disabled{color:var(--muted);cursor:default}
+.pg-info{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;padding:0 4px}
+
+/* FOOTER */
+footer{text-align:center;padding:20px 16px 28px;border-top:1px solid var(--border);margin-top:8px}
+footer p{font-size:11px;color:var(--muted);line-height:2}
+footer .copy{color:var(--gold);font-weight:700}
+
+/* ══ MY RESULT MODAL ══ */
+.modal-overlay{
+  position:fixed;inset:0;background:#00000090;backdrop-filter:blur(6px);
+  z-index:100;display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px 20px 0 0;width:100%;max-width:500px;
+  padding:0 0 32px;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,1,.6,1);
+  max-height:92vh;overflow-y:auto;
+}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:#2a2d3e;border-radius:2px;margin:14px auto 0}
+.modal-head{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-size:16px;font-weight:700;color:#fff}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;transition:background .15s}
+.modal-close:hover{background:#ffffff10}
+
+/* SEARCH IN MODAL */
+.modal-search-wrap{padding:16px 20px 0;position:relative}
+.modal-search-wrap input{
+  width:100%;background:#141621;border:1px solid var(--border);border-radius:10px;
+  color:var(--text);padding:12px 16px 12px 40px;font-size:14px;
+  font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;
+}
+.modal-search-wrap input:focus{border-color:var(--gold)}
+.modal-search-wrap input::placeholder{color:var(--muted)}
+.ms-icon{position:absolute;left:32px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.modal-hint{font-size:11px;color:var(--muted);padding:8px 20px 0;font-family:'DM Mono',monospace}
+
+/* RESULT CARD */
+.result-area{padding:16px 20px 0}
+.no-result{text-align:center;padding:32px 20px;color:var(--muted);font-size:13px}
+
+.result-card{
+  background:linear-gradient(160deg,#141621,#0e1018);
+  border:2px solid var(--border);border-radius:14px;overflow:hidden;margin-top:4px;
+}
+.result-card-top{
+  padding:22px 20px 18px;text-align:center;border-bottom:1px solid var(--border);
+  position:relative;
+}
+.result-rank-badge{
+  display:inline-block;font-size:11px;font-family:'DM Mono',monospace;
+  font-weight:700;padding:4px 12px;border-radius:20px;
+  border:1px solid;margin-bottom:12px;letter-spacing:1px;
+}
+.result-name{font-size:17px;font-weight:700;color:#fff;margin-bottom:2px;line-height:1.3}
+.result-reg{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:16px}
+.result-cgpa-big{font-size:52px;font-weight:900;font-family:'Playfair Display',serif;line-height:1}
+.result-class-lbl{font-size:12px;font-weight:600;margin-top:6px;letter-spacing:.5px}
+
+/* STATS STRIP */
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.result-stat{background:var(--surface);padding:14px 8px;text-align:center}
+.result-stat .sv{font-size:16px;font-weight:700;color:#fff;line-height:1;margin-bottom:3px}
+.result-stat .sl{font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* PROGRESS BAR */
+.result-progress{padding:16px 20px 0}
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace}
+.prog-track{height:8px;background:#1e2133;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+
+/* SEARCH RESULTS LIST */
+.search-list{padding:8px 20px 0}
+.search-item{
+  display:flex;align-items:center;gap:12px;padding:12px;
+  border:1px solid var(--border);border-radius:10px;cursor:pointer;
+  transition:background .15s,border-color .15s;margin-bottom:8px;
+}
+.search-item:hover{background:#ffffff08;border-color:var(--gold)}
+.si-rank{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);min-width:32px}
+.si-info{flex:1}
+.si-name{font-size:13px;font-weight:600;color:var(--text)}
+.si-reg{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+.si-right{text-align:right}
+.si-cgpa{font-size:14px;font-weight:700;font-family:'DM Mono',monospace}
+
+@media(max-width:460px){
+  .reg-cell{display:none}
+  thead th:nth-child(3){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-box">
+    <div class="login-emblem">🎓</div>
+    <span class="login-badge">FUTO · SICT · CSC · 2023/2024</span>
+    <h2>Academic <span>Leaderboard</span></h2>
+    <p class="login-desc">Year 1 Computer Science<br>Enter password to continue</p>
+    <label class="pw-label">Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="pwInput" placeholder="Enter password" autocomplete="off"/>
+      <button class="eye-btn" id="eyeBtn" tabindex="-1">👁</button>
+    </div>
+    <div class="login-error" id="loginErr">⚠ Incorrect password. Please try again.</div>
+    <button class="login-btn" id="loginBtn">Access Leaderboard →</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+
+  <div class="hero">
+    <div class="hero-badge">FUTO · SICT · CSC · 2023/2024</div>
+    <h1>Academic <span>Leaderboard</span></h1>
+    <p class="hero-sub">Year 1 Computer Science · Cumulative GPA Ranking</p>
+
+    <!-- MY RESULT BUTTON -->
+    <button class="my-result-btn" onclick="openModal()">
+      <span>📋</span> Check My Result
+    </button>
+
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+
+  <div class="podium" id="podium"></div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="s-icon">🔍</span>
+      <input type="search" id="searchInput" placeholder="Search name or reg number…"/>
+    </div>
+    <select id="filterSel">
+      <option value="All">All Classes</option>
+      <option value="First Class">First Class</option>
+      <option value="2nd Upper">2nd Class Upper</option>
+      <option value="2nd Lower">2nd Class Lower</option>
+      <option value="Third Class">Third Class</option>
+      <option value="Fail">Fail</option>
+    </select>
+    <span class="count-lbl" id="countLbl"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th>Name</th><th>Reg. No.</th><th>CGPA</th><th>Class</th></tr></thead>
+      <tbody id="tBody"></tbody>
+    </table>
+  </div>
+  <div class="pagination" id="pgBar"></div>
+
+  <footer>
+    <p>Federal University of Technology, Owerri · School of Information &amp; Communication Technology</p>
+    <p>© <span class="copy">faund_ln</span> · All rights reserved</p>
+  </footer>
+</div>
+
+<!-- MY RESULT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal-sheet" id="modalSheet">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <span class="modal-title">📋 Check My Result</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-search-wrap">
+      <span class="ms-icon">🔍</span>
+      <input type="text" id="modalSearch" placeholder="Type your name or registration number…" oninput="onModalSearch()" autocomplete="off"/>
+    </div>
+    <div class="modal-hint" id="modalHint">Start typing to find your result…</div>
+
+    <div id="searchList" class="search-list"></div>
+    <div id="resultArea" class="result-area"></div>
+  </div>
+</div>
+
+<script>
+/* ── LOGIN ── */
+document.getElementById('eyeBtn').onclick=function(){
+  const i=document.getElementById('pwInput'),s=i.type==='password';
+  i.type=s?'text':'password';this.textContent=s?'🙈':'👁';
+};
+function tryLogin(){
+  const v=document.getElementById('pwInput').value;
+  const e=document.getElementById('loginErr');
+  if(v==='efcc'){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('mainApp').style.display='block';
+    init();
+  } else {
+    e.style.display='block';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+    const inp=document.getElementById('pwInput');
+    inp.style.borderColor='#ff6b6b';
+    setTimeout(()=>{inp.style.borderColor='';e.style.display='none';},2000);
+  }
+}
+document.getElementById('loginBtn').onclick=tryLogin;
+document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
+
+/* ── DATA ── */
+const RAW=[
+  {n:"AMOBI, C. A.",r:"20231368765",c:4.70},{n:"UZOMA, H. C.",r:"20231361555",c:4.62},
+  {n:"MMEGWA, U. A.",r:"20231367415",c:4.54},{n:"IDIKA, B. U.",r:"20231367205",c:4.54},
+  {n:"OKOLI, U. A.",r:"20231366965",c:4.51},{n:"AMADI, C. H.",r:"20231364065",c:4.49},
+  {n:"OBIAGUNMADU, F. U.",r:"20231368845",c:4.46},{n:"EZE, F. S.",r:"20231390252",c:4.43},
+  {n:"NWOKEKE, A. C.",r:"20231365765",c:4.43},{n:"PATRICK, S. I.",r:"20231374845",c:4.41},
+  {n:"UCHE-EZEANYIKA, K. C.",r:"20231388352",c:4.41},{n:"AKAUBA, B. C.",r:"20231409522",c:4.38},
+  {n:"IJERE, S. T.",r:"20231376775",c:4.38},{n:"CHUKWUEMEKA, S. C.",r:"20231370145",c:4.35},
+  {n:"UMOH, U.N.",r:"20231398352",c:4.35},{n:"ISAAC-EZEMUOKA, C. F.",r:"20231394482",c:4.27},
+  {n:"CHIDIEBERE, W. A.",r:"20231364235",c:4.22},{n:"ONYEJESI, C. M.",r:"20231399512",c:4.22},
+  {n:"UGWUZOR, O. P.",r:"20231361995",c:4.22},{n:"ALOZIE, C. O.",r:"20231364045",c:4.19},
+  {n:"IHECHERE, I. S.",r:"20231374485",c:4.16},{n:"OGBONNA, T. C.",r:"20231399562",c:4.16},
+  {n:"ANYAOHA, C. F.",r:"20231386272",c:4.14},{n:"LAZARUS, F. T.",r:"20231381402",c:4.11},
+  {n:"AHAMEFULA, D. U.",r:"20231389252",c:4.11},{n:"EZEONYILIMBA, D. C.",r:"20231415192",c:4.08},
+  {n:"JIBULU, C. F.",r:"20231390852",c:4.08},{n:"IWUORIE, S. D.",r:"20231383542",c:4.05},
+  {n:"NNOLI, C. N.",r:"20231372345",c:4.03},{n:"ABONYI, S. V.",r:"20231395632",c:4.00},
+  {n:"ANAEKE, V. I.",r:"20231402072",c:4.00},{n:"BALOGUN, J. M.",r:"20231406612",c:4.00},
+  {n:"DANIEL, A. A.",r:"20231373795",c:4.00},{n:"MANAFA, G. C.",r:"20231374105",c:4.00},
+  {n:"NZEANOCHIEH, C. C.",r:"20231396052",c:4.00},{n:"DOZIE, C. C.",r:"20231378815",c:3.97},
+  {n:"IHEJIETO, N. D.",r:"20231405642",c:3.97},{n:"IBE, P. C.",r:"20231368935",c:3.95},
+  {n:"IWUOHA, M. I.",r:"20231390212",c:3.95},{n:"ELEFUE, D. O.",r:"20231372805",c:3.92},
+  {n:"CHINE, U. E. O.",r:"20231368005",c:3.92},{n:"NWAOZIRI, I. S.",r:"20231375155",c:3.92},
+  {n:"OZOEJIKE, C. S.",r:"20231366975",c:3.92},{n:"AKUKWE, E. S.",r:"20231367105",c:3.92},
+  {n:"MMEREOLE, C. A.",r:"20231366515",c:3.92},{n:"OKOLIE, C. E.",r:"20231374685",c:3.92},
+  {n:"OKPUNWA, M. I.",r:"20231384832",c:3.92},{n:"OLIVER, U. O.",r:"20231386542",c:3.86},
+  {n:"CHIDEBE, L. N.",r:"20231413452",c:3.86},{n:"EKWEBELEM, G. N.",r:"20231365415",c:3.86},
+  {n:"MOSES, M.",r:"20231406932",c:3.89},{n:"CHINEKEZI, D. C.",r:"20231383512",c:3.89},
+  {n:"OKWUMUO, A. J.",r:"20231375455",c:3.89},{n:"ALAEFUNA, C. C.",r:"20231366615",c:3.83},
+  {n:"NNOLUM, F. C.",r:"20231386262",c:3.81},{n:"OBI-NJOKU, G. J.",r:"20231361775",c:3.81},
+  {n:"AMADI, P. C.",r:"20231393012",c:3.78},{n:"HILLARY, C. P.",r:"20231361765",c:3.78},
+  {n:"OKOLIE, M. E.",r:"20231398922",c:3.78},{n:"AGBAI, O. U.",r:"20231411752",c:3.73},
+  {n:"INNOCENT, D. O.",r:"20231397652",c:3.73},{n:"JEREMIAH, O. K.",r:"20231380952",c:3.73},
+  {n:"DIALACHUKWU, D. E.",r:"20231366175",c:3.76},{n:"EMEH, D. O.",r:"20231388272",c:3.76},
+  {n:"JONATHAN, M. A.",r:"20231373865",c:3.76},{n:"UKACHI, T. D.",r:"20231372145",c:3.76},
+  {n:"JONATHAN, V. C.",r:"20231394172",c:3.70},{n:"OKORO, W. C.",r:"20231379575",c:3.70},
+  {n:"UGBOBUAKU, C. C.",r:"20231380732",c:3.70},{n:"ISREAL, D. U.",r:"20231413092",c:3.65},
+  {n:"OKOH, B. N.",r:"20231410122",c:3.65},{n:"ONYEJI, D. C.",r:"20231380412",c:3.65},
+  {n:"VAL-CHINAGI, G. U.",r:"20231363245",c:3.65},{n:"SAMSON, C. C.",r:"20231385312",c:3.62},
+  {n:"AKINWALE, V. M.",r:"20231392752",c:3.59},{n:"CHUKWU, P. C.",r:"20231367895",c:3.59},
+  {n:"AKADIEZE, E. C.",r:"20231373095",c:3.54},{n:"EZIMAKOR, U. D.",r:"20231385222",c:3.54},
+  {n:"OKOLI, C. V.",r:"20231379782",c:3.54},{n:"OPARAH, M. C.",r:"20231365335",c:3.54},
+  {n:"UCHENNA, G. I.",r:"20231367375",c:3.54},{n:"UDEGBULEM, C. L.",r:"20231410552",c:3.54},
+  {n:"ANUJURU, F. C.",r:"20231392092",c:3.57},{n:"DIKE, N.",r:"20231386022",c:3.57},
+  {n:"MADUBUIKE, N. D.",r:"20231361785",c:3.57},{n:"IKECHUKWU, S. O.",r:"20233139362",c:3.41},
+  {n:"OKONKWO, E. O.",r:"20231383902",c:3.41},{n:"ONUOHA, D. C.",r:"20231371335",c:3.41},
+  {n:"CHUKWUEMEKA, A. S.",r:"20231368075",c:3.51},{n:"OKPARA, J. U.",r:"20231361275",c:3.51},
+  {n:"ONYEAKAZI, U. E.",r:"20231374825",c:3.51},{n:"PATRICK, K. K.",r:"20231402782",c:3.51},
+  {n:"UDENENWU, C. M.",r:"20231364115",c:3.51},{n:"ALANEME, C. E.",r:"20231369145",c:3.49},
+  {n:"CHINEKEZI, V. I.",r:"20231394432",c:3.49},{n:"DURU, B. C.",r:"20231387772",c:3.49},
+  {n:"ONYEMAELU, V. C.",r:"20231393812",c:3.49},{n:"OPARA, S. C.",r:"20231396302",c:3.49},
+  {n:"ABRAHAM, E. E.",r:"20231386092",c:3.46},{n:"NNANNA, G. N.",r:"20231369895",c:3.46},
+  {n:"NWADINOBI, C. M.",r:"20231361615",c:3.46},{n:"AKUEGBU, C. S.",r:"20231386882",c:3.43},
+  {n:"OBIORA, C. C.",r:"20231394122",c:3.43},{n:"ASIULOKA, F. O.",r:"20231362465",c:3.38},
+  {n:"EVANS-DIKE, P. M.",r:"20231381422",c:3.38},{n:"OBASI, S. C.",r:"20231382762",c:3.38},
+  {n:"AGUBATA, C. K.",r:"20231384372",c:3.30},{n:"ALOZIE, G. I.",r:"20231378425",c:3.30},{n:"OKEOMA, M. C.",r:"20231379485",c:3.35},
+  {n:"OZOEMENLA, A. M.",r:"20231367025",c:3.30},{n:"CHIKA, W. N.",r:"20231399732",c:3.32},
+  {n:"DURUCHUKWU, C. D.",r:"20231361735",c:3.32},{n:"MICHAEL, C. S.",r:"20231399772",c:3.32},
+  {n:"ONUOHA, E. E.",r:"20231404912",c:3.32},{n:"INNOCENT, G. W.",r:"20231409282",c:3.11},
+  {n:"NNAJI, K. E.",r:"20231399322",c:3.11},{n:"NWACHUKWU, P. C.",r:"20231413892",c:3.11},
+  {n:"IHEAKACHUKWU, M. C.",r:"20231402992",c:3.11},{n:"ANDREW, C. J.",r:"20231378175",c:3.14},
+  {n:"NWACHUKWU, O. C.",r:"20231393572",c:3.14},{n:"IHEAKA, D. E.",r:"20231402022",c:3.08},
+  {n:"EBERE, K. C.",r:"20231412742",c:3.08},{n:"SIMON, D. M.",r:"20231396282",c:3.08},
+  {n:"OKORO-ENYI, R. C.",r:"20231371755",c:3.27},{n:"IKENNA, E. M.",r:"20231397702",c:3.27},
+  {n:"POLLYSON, D.L O.",r:"20231394852",c:3.27},{n:"UZOHO LAZARUS, E. O.",r:"20231363345",c:3.27},
+  {n:"NWAJOKO, F. I.",r:"20231368405",c:3.26},{n:"ADINNU, L. C.",r:"20231404952",c:3.19},
+  {n:"CHIBUZOR, J. C.",r:"20231363335",c:3.19},{n:"ACHUGO, O. D.",r:"20231377705",c:3.24},
+  {n:"EHIOGU, C. J.",r:"20231374255",c:3.24},{n:"OCHE, M. E.",r:"20231372975",c:3.24},
+  {n:"ODETADE, J. T.",r:"20231380702",c:3.24},{n:"ONUOHA, V. C.",r:"20231407372",c:3.24},
+  {n:"ONWE, D. I.",r:"20231408162",c:3.22},{n:"ONWUKA, U. S.",r:"20231415122",c:3.22},
+  {n:"OKOYE, K. C.",r:"20231374425",c:3.16},{n:"EZE, D. K.",r:"20231373595",c:3.03},
+  {n:"INNOCENT, C. J.",r:"20231361585",c:3.03},{n:"OKOYE, O. G.",r:"20231405812",c:3.03},
+  {n:"OKLIKA, M. J.",r:"20231384572",c:3.03},{n:"JOHN, G. K.",r:"20231374215",c:3.00},
+  {n:"OGBAJI, U. P.",r:"20231410562",c:3.00},{n:"JOHN-ANORUO, O. I.",r:"20231417942",c:2.97},
+  {n:"AGU, C. M.",r:"20231368445",c:2.97},{n:"ANYIAM, C. J.",r:"20231391202",c:2.97},
+  {n:"UKAEGBU, K. C.",r:"20231386772",c:2.97},{n:"OGBU, P. U.",r:"20231388752",c:3.05},
+  {n:"OHAGWU, M. C.",r:"20231366125",c:3.05},{n:"IWUNZE, C. M.",r:"20231394922",c:2.95},
+  {n:"ISIEKWENE, P. E.",r:"20231392822",c:2.86},{n:"MARTINS, D. C.",r:"20231369345",c:2.86},
+  {n:"NWABUISI, M. U.",r:"20231402652",c:2.86},{n:"OMEKEDO, E. G.",r:"20231413572",c:2.86},
+  {n:"URUM-EKE, E. J.",r:"20231399792",c:2.86},{n:"AHUKANNA, P. C.",r:"20231368175",c:2.81},
+  {n:"CHUKWUEMEKA, C. K.",r:"20231414982",c:2.81},{n:"GODFREY, C. P.",r:"20231381772",c:2.81},
+  {n:"NWOKEKE, E. C.",r:"20231388432",c:2.84},{n:"AGBUGBA, P. A.",r:"20231407632",c:2.73},
+  {n:"HUMBLE, W. C.",r:"20231413812",c:2.73},{n:"AZUBUIKE, E. I.",r:"20231404822",c:2.89},
+  {n:"ENWEREM, I. K.",r:"20231376295",c:2.89},{n:"ESIABA, C. C.",r:"20231407872",c:2.89},
+  {n:"NNAJI, L. O.",r:"20231402742",c:2.89},{n:"OFOEGBU, C. P.",r:"20231394532",c:2.89},
+  {n:"OMERUAH, L. A.",r:"20231364475",c:2.89},{n:"BRIGHT, P. M.",r:"20231362805",c:2.78},
+  {n:"EYO, W. A.",r:"20231416782",c:2.78},{n:"OKAFOR, C. R.",r:"20231368835",c:2.78},
+  {n:"OKWA, H. O.",r:"20231365795",c:2.76},{n:"CHIKA, U. K.",r:"20231368805",c:2.68},
+  {n:"OPENE, C. I.",r:"20231388562",c:2.68},{n:"UDOCHUKWU, G. U.",r:"20231393392",c:2.68},
+  {n:"ELEKWA, V. A.",r:"20231370245",c:2.65},{n:"IHEANACHO, C. C.",r:"20231412112",c:2.65},
+  {n:"NWAFOR, O. T.",r:"20231388092",c:2.65},{n:"ALABILA, M. O.",r:"20231387692",c:2.92},
+  {n:"IBE, S. A.",r:"20231380342",c:2.92},{n:"NJOKU, D. C.",r:"20231390952",c:2.92},
+  {n:"NZEH, D. C.",r:"20231382662",c:2.92},{n:"UZOMA, O.I C.",r:"20231390132",c:2.92},
+  {n:"AMOS, P. Y.",r:"20231366555",c:2.70},{n:"EMMANUEL, V. I.",r:"20231399152",c:2.70},
+  {n:"ONWUDEBE, O. K.",r:"20231362675",c:2.70},{n:"ABIAHU, F. C.",r:"20231386102",c:2.59},
+  {n:"EJEGBU, K. C.",r:"20231405682",c:2.59},{n:"IWUJI, C. P.",r:"20231376815",c:2.62},
+  {n:"OKONKWO, C. T.",r:"20231394762",c:2.62},{n:"PEDRO, D. C.",r:"20231384792",c:2.62},
+  {n:"AHAOMA-DICK, C. F.",r:"20231369715",c:2.57},{n:"OHAEGBU, I. K.",r:"20231399182",c:2.57},
+  {n:"MPAMUGO, N. N.",r:"20231375775",c:2.54},{n:"OKORO, J. C.",r:"20231370425",c:2.54},
+  {n:"ANI, A. E.",r:"20231366315",c:2.51},{n:"HYACINTH, C. J.",r:"20231397482",c:2.51},
+  {n:"OGBONNA, K. C.",r:"20231388282",c:2.51},{n:"ORIWOH, G. C.",r:"20231392032",c:2.51},
+  {n:"OWOYELE, A.",r:"20231406392",c:2.51},{n:"ULU, C. P.",r:"20231398972",c:2.49},
+  {n:"OKORO-EJIKE, J. C.",r:"20231366495",c:2.49},{n:"OHEMU, D. P.",r:"20231401142",c:2.46},
+  {n:"OBANI, I. O.",r:"20231368575",c:2.43},{n:"OKONKWO, C. J.",r:"20231363165",c:2.43},
+  {n:"OKORO, D. N.",r:"20231374655",c:2.43},{n:"ONU, H. C.",r:"20231376975",c:2.43},
+  {n:"OPARAH, K. B.",r:"20231414022",c:2.43},{n:"OPARA, C. V.",r:"20231402372",c:2.35},
+  {n:"ADAMS, E. C.",r:"20231387092",c:2.32},{n:"NWABUIFE, E. C.",r:"20231371885",c:2.32},
+  {n:"OKOLIE, C. J.",r:"20231407712",c:2.32},{n:"UGOCHUKWU, Z.L C.",r:"20231370295",c:2.32},
+  {n:"ANDREW, J. D.",r:"20231383992",c:2.30},{n:"ONYEAKAGBUSI, D. A.",r:"20231386962",c:2.30},
+  {n:"UZOMA, J. C.",r:"20231415592",c:2.19},{n:"IBE, A. U.",r:"20231411772",c:2.22},
+  {n:"JOHN, E. N.",r:"20231371565",c:2.22},{n:"ODOEKWU, M. E.",r:"20231366145",c:2.22},
+  {n:"NNAMANI, C. C.",r:"20231386002",c:2.27},{n:"OKOLIE, D. K.",r:"20231374055",c:2.27},
+  {n:"UDOCHUKWU-JOHN, K. S.",r:"20231374445",c:2.27},{n:"CHUKWUEMEKA, N. U.",r:"20231369915",c:2.24},
+  {n:"CHRISTIAN, V. C.",r:"20231390672",c:2.05},{n:"DIKE, C. D.",r:"20231399832",c:2.08},
+  {n:"NWARIEJI, M. O.",r:"20231378552",c:2.08},{n:"OBARAEZE, N. C.",r:"20231407452",c:2.03},
+  {n:"ODINAKA, P. C.",r:"20231415402",c:2.00},{n:"OGOR, P. C.",r:"20231405102",c:1.97},
+  {n:"ODUMA, J. C.",r:"20231386442",c:1.95},{n:"ORUKWOWU, G. O.",r:"20231383962",c:1.84},
+  {n:"CHUKWUNEYE, D. M.",r:"20231390232",c:1.86},{n:"ULU, E. I.",r:"20231366225",c:1.89},
+  {n:"ANYANKA, C. D.",r:"20231404782",c:1.89},{n:"IHEKWABA, C. C.",r:"20231362545",c:1.89},
+  {n:"IWUAGWU, S. E.",r:"20231362975",c:1.76},{n:"UBANI, N. D.",r:"20231398902",c:1.76},
+  {n:"OKEKE, T. R.",r:"20231389112",c:1.70},{n:"ANOZIE, M. N.",r:"20231410432",c:1.65},
+  {n:"AZUBUIKE, K. C.",r:"20231364345",c:1.68},{n:"AJAH, W. I.",r:"20231370475",c:1.51},
+  {n:"OGUNDU, E. K.",r:"20231418602",c:1.49},{n:"EBITE, C. C.",r:"20231374765",c:1.19},
+  {n:"EDWIN, C. E.",r:"20231418752",c:1.00},{n:"CHUKWUMAIJEM, E. M.",r:"20231417342",c:0.89}
+];
+
+const students=RAW.sort((a,b)=>b.c-a.c).map((s,i)=>({...s,rank:i+1}));
+const TOTAL=students.length;
+const AVG=(students.reduce((a,b)=>a+b.c,0)/TOTAL).toFixed(2);
+
+function gi(c){
+  if(c>=4.50)return{label:"First Class", color:"#f5c842",bg:"#f5c84220",border:"#f5c84240"};
+  if(c>=3.50)return{label:"2nd Upper",   color:"#b0bec5",bg:"#b0bec520",border:"#b0bec540"};
+  if(c>=2.40)return{label:"2nd Lower",   color:"#cd7f32",bg:"#cd7f3220",border:"#cd7f3240"};
+  if(c>=1.50)return{label:"Third Class", color:"#8888aa",bg:"#8888aa20",border:"#8888aa40"};
+  return           {label:"Fail",        color:"#ff6b6b",bg:"#ff6b6b20",border:"#ff6b6b40"};
+}
+
+/* ── MODAL ── */
+function openModal(){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('modalSearch').focus(),350);
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  setTimeout(()=>{
+    document.getElementById('modalSearch').value='';
+    document.getElementById('searchList').innerHTML='';
+    document.getElementById('resultArea').innerHTML='';
+    document.getElementById('modalHint').textContent='Start typing to find your result…';
+  },300);
+}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function onModalSearch(){
+  const q=document.getElementById('modalSearch').value.trim().toLowerCase();
+  const list=document.getElementById('searchList');
+  const area=document.getElementById('resultArea');
+  const hint=document.getElementById('modalHint');
+
+  list.innerHTML='';area.innerHTML='';
+
+  if(q.length<2){
+    hint.textContent='Type at least 2 characters to search…';
+    return;
+  }
+
+  const matches=students.filter(s=>s.n.toLowerCase().includes(q)||s.r.includes(q));
+
+  if(matches.length===0){
+    hint.textContent='No student found. Try your last name or reg number.';
+    return;
+  }
+
+  if(matches.length===1){
+    hint.textContent='';
+    showResult(matches[0]);
+    return;
+  }
+
+  hint.textContent=`${matches.length} students found — tap your name:`;
+  list.innerHTML=matches.slice(0,8).map(s=>{
+    const g=gi(s.c);
+    return `<div class="search-item" onclick="showResult(students.find(x=>x.r==='${s.r}'))">
+      <div class="si-rank">#${s.rank}</div>
+      <div class="si-info">
+        <div class="si-name">${s.n}</div>
+        <div class="si-reg">${s.r}</div>
+      </div>
+      <div class="si-right">
+        <div class="si-cgpa" style="color:${g.color}">${s.c.toFixed(2)}</div>
+        <div style="font-size:10px;color:${g.color};font-family:'DM Mono',monospace">${g.label}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showResult(s){
+  document.getElementById('searchList').innerHTML='';
+  document.getElementById('modalHint').textContent='';
+  const g=gi(s.c);
+  const pct=Math.round(((TOTAL-s.rank)/TOTAL)*100);
+  const above=students.filter(x=>x.c>s.c).length;
+  const below=students.filter(x=>x.c<s.c).length;
+  const medal=s.rank===1?'🥇':s.rank===2?'🥈':s.rank===3?'🥉':'';
+  const progW=Math.round((s.c/5)*100);
+
+  document.getElementById('resultArea').innerHTML=`
+    <div class="result-card">
+      <div class="result-card-top" style="border-bottom:1px solid ${g.border}">
+        <div class="result-rank-badge" style="color:${g.color};border-color:${g.border};background:${g.bg}">
+          ${medal} RANK #${s.rank} OF ${TOTAL}
+        </div>
+        <div class="result-name">${s.n}</div>
+        <div class="result-reg">${s.r}</div>
+        <div class="result-cgpa-big" style="color:${g.color}">${s.c.toFixed(2)}</div>
+        <div class="result-class-lbl" style="color:${g.color}">${g.label}</div>
+      </div>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="sv" style="color:${g.color}">${pct}%</div>
+          <div class="sl">Percentile</div>
+        </div>
+        <div class="result-stat">
+          <div class="sv">${above}</div>
+          <div class="sl">Students Above</div>
+        </div>
+        <div class="result-stat">
+          <div class="sv">${below}</div>
+          <div class="sl">Students Below</div>
+        </div>
+      </div>
+
+      <div class="result-progress">
+        <div class="prog-label">
+          <span>CGPA Progress</span>
+          <span style="color:${g.color}">${s.c.toFixed(2)} / 5.00</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" id="pf" style="width:0%;background:linear-gradient(90deg,${g.color}99,${g.color})"></div>
+        </div>
+      </div>
+      <div class="result-progress" style="padding-top:10px">
+        <div class="prog-label">
+          <span>vs Class Average (${AVG})</span>
+          <span style="color:${s.c>=AVG?'#4caf50':'#ff6b6b'}">${s.c>=parseFloat(AVG)?'+':''  }${(s.c-AVG).toFixed(2)}</span>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" id="pf2" style="width:0%;background:${s.c>=parseFloat(AVG)?'#4caf5099':'#ff6b6b99'}"></div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+  `;
+
+  /* animate bars */
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{
+      document.getElementById('pf').style.width=progW+'%';
+      document.getElementById('pf2').style.width=Math.min(100,Math.round((parseFloat(AVG)/5)*100))+'%';
+    },80);
+  });
+}
+
+/* ── MAIN INIT ── */
+let inited=false;
+function init(){
+  if(inited)return;inited=true;
+  const s=students;
+  const stats=[
+    {v:s.filter(x=>x.c>=4.50).length,            l:"1st Class",col:"#f5c842"},
+    {v:s.filter(x=>x.c>=3.50&&x.c<4.50).length, l:"2nd Upper",col:"#b0bec5"},
+    {v:s.filter(x=>x.c>=2.40&&x.c<3.50).length, l:"2nd Lower",col:"#cd7f32"},
+    {v:s.filter(x=>x.c>=1.50&&x.c<2.40).length, l:"3rd Class",col:"#8888aa"},
+    {v:s.filter(x=>x.c<1.50).length,             l:"Fail",     col:"#ff6b6b"},
+    {v:AVG,                                        l:"Avg CGPA", col:"#3a8eff"},
+  ];
+  document.getElementById('statsGrid').innerHTML=stats.map(d=>
+    `<div class="stat-card"><div class="val" style="color:${d.col}">${d.v}</div><div class="lbl">${d.l}</div></div>`
+  ).join('');
+
+  const p=[
+    {s:students[1],rank:2,cls:'silver',medal:'🥈',col:'#b0bec5'},
+    {s:students[0],rank:1,cls:'gold',  medal:'🥇',col:'#f5c842'},
+    {s:students[2],rank:3,cls:'bronze',medal:'🥉',col:'#cd7f32'},
+  ];
+  document.getElementById('podium').innerHTML=p.map(x=>
+    `<div class="podium-card ${x.cls}">
+      <div class="podium-medal">${x.medal}</div>
+      <div class="podium-rank" style="color:${x.col}">#${x.rank}</div>
+      <div class="podium-name">${x.s.n.split(',')[0]}</div>
+      <div class="podium-cgpa" style="color:${x.col}">${x.s.c.toFixed(2)}</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('searchInput').addEventListener('input',()=>{curPage=1;render();});
+  document.getElementById('filterSel').addEventListener('change',()=>{curPage=1;render();});
+  render();
+}
+
+let curPage=1;const PER=25;
+function getF(){
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  const f=document.getElementById('filterSel').value;
+  return students.filter(s=>(!q||s.n.toLowerCase().includes(q)||s.r.includes(q))&&(f==='All'||gi(s.c).label===f));
+}
+function render(){
+  const f=getF();const total=f.length;const pages=Math.ceil(total/PER)||1;
+  if(curPage>pages)curPage=1;
+  const sl=f.slice((curPage-1)*PER,curPage*PER);
+  document.getElementById('countLbl').textContent=`${total} student${total!==1?'s':''}`;
+  document.getElementById('tBody').innerHTML=sl.map(s=>{
+    const g=gi(s.c);const m=s.rank===1?'🥇':s.rank===2?'🥈':s.rank===3?'🥉':'';
+    return `<tr>
+      <td class="r-cell">${m||'#'+s.rank}</td>
+      <td class="n-cell ${s.rank<=10?'hi':''}">${s.n}</td>
+      <td class="reg-cell">${s.r}</td>
+      <td class="c-cell" style="color:${g.color}">${s.c.toFixed(2)}</td>
+      <td><span class="badge" style="color:${g.color};background:${g.bg};border-color:${g.border}">${g.label}</span></td>
+    </tr>`;
+  }).join('');
+  const pg=document.getElementById('pgBar');
+  if(pages<=1){pg.innerHTML='';return;}
+  pg.innerHTML=`
+    <button class="pg-btn" onclick="go(${curPage-1})" ${curPage===1?'disabled':''}>← Prev</button>
+    <span class="pg-info">Page ${curPage} of ${pages}</span>
+    <button class="pg-btn" onclick="go(${curPage+1})" ${curPage===pages?'disabled':''}>Next →</button>`;
+}
+function go(p){curPage=p;render();document.querySelector('.controls').scrollIntoView({behavior:'smooth',block:'start'});}
+</script>
+</body>
+</html>
